@@ -1,0 +1,104 @@
+table {
+    border: 1px solid black;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+tr,
+td {
+    border: 1px solid black;
+}
+
+td {
+    padding: 5px;
+}
+
+tr:hover {
+    background-color: yellow;
+}
+
+th {
+    background-color: black;
+    color: white;
+}
+#ajoutFormulaire{
+    width: 50%;
+    padding: 10px 15px;
+    box-sizing: border-box;
+}
+#recherche{
+    width: 50%;
+    padding: 10px 15px;
+    background-image: url('searchicon.png');
+}
+input:invalid {
+    background-color: pink;
+}
+
+input:valid {
+    background-color: lightGreen;
+}
+
+.bouton {
+	border:none;
+    padding: 14px 40px;
+	border-radius:8px;
+	background:#d34836;
+	font:bold 13px Arial;
+	color:#fff;
+    text-align: center;
+}
+.boutonPage{
+    background-color: white;
+    color: black;
+    border: 2px solid #e7e7e7;
+}
+#formulairemodif{
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+
+input[type=text]{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.submit {
+    width: 20%;
+    background-color: gray;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.delete {
+  background-color: red; 
+  color: white; 
+  border-radius: 4px;
+  border: 2px solid black;
+}
+
+.delete:hover {
+  background-color: darkred;
+  color: white;
+}
+.modifier {
+  background-color: blue; 
+  color: white; 
+  border-radius: 4px;
+  border: 2px solid black;
+}
+
+.modifier:hover {
+  background-color: darkblue;
+  color: white;
+}
+.pagination
+{
+    text-align: center;
+}
