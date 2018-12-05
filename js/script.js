@@ -166,7 +166,7 @@ function init() {
             },
             lastPage()
             {
-                this.page=this.nbRestaurants / this.pagesize;
+                this.page=Math.floor(this.nbRestaurants / this.pagesize);
                 this.getRestaurantsFromServer();
             },
             slideBar()
