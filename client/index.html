@@ -1,99 +1,14 @@
 <!DOCTYPE html>
-
-<html>
-
-<head>
+<html lang="en">
+  <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <script src="lib/vue.min.js"></script>
-    <script src="lib/lodash.min.js"></script>
-    <script src="js/script.js"></script>
-    <!--<script src=“https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js“></script>-->
-    
-    <link rel="stylesheet" href="css/styles.css">
-    
-    <title>JS Bin</title>
-</head>
-
-<body>
-    <h2>Ajouter un restaurant :</h2>
-    <div id="app">
-        <form id="ajoutFormulaire" v-on:submit="ajouterRestaurant">
-            <label>
-                Nom : <input type="text" name="nom" required v-model="nom">
-            </label>
-            <label>
-                Cuisine : <input type="text" name="cuisine" required v-model="cuisine">
-            </label>
-
-            <button class="submit">Ajouter</button>
-        </form>
-        <p>
-            <label>
-            Recherche : 
-            <input id="recherche"
-                   type="text" 
-                   v-on:input="chercherRestaurants"
-                   v-model="name"
-            >
-            </label>
-        </p>
-<h1>Nombre de restaurants : {{nbRestaurants}}</h1>
- <div class="slide">
-  <input v-on:input="slideBar" type="range" min="1" max="100" value="10" step=5 class="slider" id="myRange">
-  <b id="demo"></b>
-</div>       
- 
-<form id="formulairemodif" v-on:submit="modifierRestaurant">
-                                    <label for="id">Id :</label>
-                                    <input id="id" type="text" name="_id" v-model="formulaireRestaurant.id">
-                             
-                                    <label for="nom">Nom</label>
-                                    <input id="nomrestaurant" type="text" name="nom" v-model="formulaireRestaurant.nom">
-                            
-                             
-                                    <label for="cuisine">Cuisine</label>
-                                    <input id="cuisine" type="text" name="cuisine" v-model="formulaireRestaurant.cuisine">
-                             
-                                <button class="submit">Valider</button>
-                            </form>
-        <table>
-            <tr>
-            	<!--<th>Id </th>-->
-                <th>Nom</th>
-                <th>Cuisine </th>
-                <th>Delete</th>
-                <th>Modifier</th>
-
-            </tr>
-            <tbody>
-                <tr v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}"
-                    v-bind:class="{bordureRouge:(index === 2)}">
-                    <!--<td>{{r._id}}</td>-->
-                    <td align="center">{{r.name}}</td>
-                    <td align="center"> {{r.cuisine}}</td>
-                    <td align="center">
-                    	<button class="delete" v-on:click="supprimerRestaurant(r._id)">DELETE</button>
-                    </td>
-                    <td align="center">
-                    	<button class="modifier" v-on:click="afficherFormulaire(r._id, r.name, r.cuisine)">Modifier</button>
-                    	<!-- <button v-on:click="modifierRestaurant(r._id)">Modifier</button> -->
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <br />
-                
-        <br />
-        <div class="pagination">
-        <button class="bouton" v-on:click="pagePrecedente">Précédent</button>
-        <button class="boutonPage" v-on:click="firstPage">1</button>
-        <button class="boutonPage">Page {{page+1}}</button>
-        <button class="boutonPage" v-on:click="lastPage">{{dernierePage}}</button>
-        <button class="bouton" v-on:click="pageSuivante">Suivant</button>
-        </div>
-    </div>
-
-</body>
-
+	<script src="/src/lib/vue.min.js"></script>
+    <script src="/src/lib/lodash.min.js"></script>
+    <title>Mini-Projet Restaurants</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="/dist/build.js"></script>
+  </body>
 </html>
+
