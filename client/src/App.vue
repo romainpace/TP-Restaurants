@@ -2,6 +2,7 @@
   <div id="app">
    
  <router-link to="/restaurants">Restaurants</router-link>
+<!--  <router-link to="/detail">Details</router-link> -->
     <router-view></router-view>
 
   </div>
