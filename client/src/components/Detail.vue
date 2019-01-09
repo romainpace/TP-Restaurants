@@ -57,16 +57,14 @@ export default {
                 // let url = "http://localhost:4545/api/restaurants?idrest=" + "5c3640997e72870ec4b5016c";
 
                 fetch(url)
-                    .then(reponseJSON => {
+                    .then((reponseJSON) => {
                         reponseJSON.json()
-                            .then(reponseJS => {
+                            .then((reponseJS) => {
                                 this.restaurants = reponseJS.data;
                                 this.nbRestaurants = reponseJS.count;
                                 this.dernierePage=Math.floor(this.nbRestaurants/this.pagesize);
                                 console.log(reponseJS.msg);
-                                this.r["name"] = this.restaurant.name;
-    							              this.r["borough"] = this.restaurant.borough;
-                                console.log(this.r.borough);
+                            });
 
 
 
@@ -75,10 +73,13 @@ export default {
                             this.r["name"] = this.restaurant.name;
 							this.r["borough"] = this.restaurant.borough;
 
-    						}
-              });
-
-
+						if( this.restaurant.address )
+						{
+							this.a["building"] = this.restaurant.address.building;
+							this.a["street"] = this.restaurant.address.street;
+		          			this.a["zipcode"] = this.restaurant.address.zipcode;
+		        
+						}
 						console.log("LA RUE EST :" +this.a["building"]);
 						console.log("LA Street EST :" +this.a["street"]);
                     })
@@ -86,7 +87,7 @@ export default {
                         console.log(err);
                     });
             },
-
+    	
     }
 
 
@@ -96,3 +97,4 @@ export default {
 <style>
 
 </style>
+
