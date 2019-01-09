@@ -65,6 +65,9 @@
                     	<button class="modifier" v-on:click="afficherFormulaire(r._id, r.name, r.cuisine)">Modifier</button>
                     	<!-- <button v-on:click="modifierRestaurant(r._id)">Modifier</button> -->
                     </td>
+                    <td>
+                    <router-link class="rl" :to="`/detail/${r._id}`">Detail</router-link> 
+                </td>
                 </tr>
             </tbody>
         </table>
