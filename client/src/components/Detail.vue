@@ -1,5 +1,6 @@
 <template>
-<!-- <h3>Detail du restaurant : {{r['name']}}</h3> -->
+<div class="app">
+<h3>Detail du restaurant : {{r['name']}}</h3>
 
    <app-restau-detail
 			v-bind:building="a['building']"
@@ -8,12 +9,15 @@
 			v-bind:borough="r['borough']"
 		>
 		</app-restau-detail>  
+
+		<router-link class="button" :to="`/carte/${restaurant._id}`">Accèder à la carte</router-link>
 		<!-- <app-restau-detail></app-restau-detail> -->
+	</div>
 </template>
 
 <script>
 export default {
-  name: "app",
+ /* name: "app",*/
   data() {
     return {
     	restaurant: {},
@@ -25,6 +29,7 @@ export default {
       page:0,
       dernierePage:0,
       pagesize:10,
+      idrest:0,
       r: {
         name: "",
         cuisine: "",
@@ -42,7 +47,6 @@ export default {
             this.getRestaurantsFromServer();
              console.log("DETAIL VUE APRES AFFICHAGE");
         },
-
     methods :
     {
     	 getRestaurantsFromServer() {
@@ -50,6 +54,7 @@ export default {
                     this.page + "&pagesize=" +
                     this.pagesize + "&name=" +
                     this.name;
+                // let url = "http://localhost:4545/api/restaurants?idrest=" + "5c3640997e72870ec4b5016c";
 
                 fetch(url)
                     .then((reponseJSON) => {
@@ -60,6 +65,10 @@ export default {
                                 this.dernierePage=Math.floor(this.nbRestaurants/this.pagesize);
                                 console.log(reponseJS.msg);
                             });
+
+
+
+
 
                             this.r["name"] = this.restaurant.name;
 							this.r["borough"] = this.restaurant.borough;
@@ -80,6 +89,8 @@ export default {
             },
     	
     }
+
+
 };
 </script>
 
