@@ -1,51 +1,47 @@
 <template>
   <div id="app">
-     TEST VUE RESTAURANTS
-	 
-	 <h2>Ajouter un restaurant :</h2>
     <div id="app">
-        <form id="ajoutFormulaire" v-on:submit="ajouterRestaurant">
-            <label>
-                Nom : <input type="text" name="nom" required v-model="nom">
-            </label>
-            <label>
-                Cuisine : <input type="text" name="cuisine" required v-model="cuisine">
-            </label>
+        <form id="ajoutFormulaire" v-on:submit="ajouterRestaurant" style="width:100%">
+            <h2>Ajouter un restaurant :</h2>
+            <label>Nom du restaurant</label>
+            <input type="text" name="nom" required v-model="nom" placeholder="Ex. Wendy's">
+
+            <label>Type de cuisine</label>
+            <input type="text" name="cuisine" required v-model="cuisine" placeholder="Ex. American">
 
             <button class="submit">Ajouter</button>
         </form>
-        <p>
-            <label>
-            Recherche : 
-            <input id="recherche"
-                   type="text" 
-                   v-on:input="chercherRestaurants"
-                   v-model="name"
-            >
-            </label>
-        </p>
-<h1>Nombre de restaurants : {{nbRestaurants}}</h1>
- <div class="slide">
-  <input v-on:input="slideBar" type="range" min="1" max="100" value="10" step=5 class="slider" id="myRange">
-  <b id="demo"></b>
-</div>       
- 
-<form id="formulairemodif" v-on:submit="modifierRestaurant">
-                                    <label for="id">Id :</label>
-                                    <input id="id" type="text" name="_id" v-model="formulaireRestaurant.id">
-                             
-                                    <label for="nom">Nom</label>
-                                    <input id="nomrestaurant" type="text" name="nom" v-model="formulaireRestaurant.nom">
-                            
-                             
-                                    <label for="cuisine">Cuisine</label>
-                                    <input id="cuisine" type="text" name="cuisine" v-model="formulaireRestaurant.cuisine">
-                             
-                                <button class="submit">Valider</button>
-                            </form>
+        <hr>
+
+        <label>Recherche : </label>
+        <input id="recherche" type="text" v-on:input="chercherRestaurants" v-model="name">
+
+
+        <h1>Nombre de restaurants : {{nbRestaurants}}</h1>
+        <div class="slide">
+          <input v-on:input="slideBar" type="range" min="1" max="100" value="10" step=5 class="slider" id="myRange">
+          <b id="demo"></b>
+        </div>
+
+        <!-- Modifier Restaurant -->
+        <form id="formulairemodif" v-on:submit="modifierRestaurant">
+          <label for="id">Id :</label>
+          <input id="id" type="text" name="_id" v-model="formulaireRestaurant.id">
+
+          <label for="nom">Nom</label>
+          <input id="nomrestaurant" type="text" name="nom" v-model="formulaireRestaurant.nom">
+
+
+          <label for="cuisine">Cuisine</label>
+          <input id="cuisine" type="text" name="cuisine" v-model="formulaireRestaurant.cuisine">
+          <button class="submit">Valider</button>
+        </form>
+        <!-- Fin Modifier Restaurant -->
+
+
         <table>
+          <thead>
             <tr>
-            	<!--<th>Id </th>-->
                 <th>Nom</th>
                 <th>Cuisine </th>
                 <th>Delete</th>
@@ -53,37 +49,34 @@
                 <th>Détails</th>
 
             </tr>
-            <tbody>
-                <tr v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}"
-                    v-bind:class="{bordureRouge:(index === 2)}"
-                    @click="selectionRestaurant(r)">
-                    <!--<td>{{r._id}}</td>-->
-                    <td align="center">{{r.name}}</td>
-                    <td align="center"> {{r.cuisine}}</td>
-                    <td align="center">
-                    	<button class="delete" v-on:click="supprimerRestaurant(r._id)">DELETE</button>
-                    </td>
-                    <td align="center">
-                    	<button class="modifier" v-on:click="afficherFormulaire(r._id, r.name, r.cuisine)">Modifier</button>
-                    	<!-- <button v-on:click="modifierRestaurant(r._id)">Modifier</button> -->
-                    </td>
-                    <td>
-                    <router-link class="detail" tag="button" :to="`/detail/${r._id}`">Detail</router-link>
-                </td>
-                </tr>
-            </tbody>
+          </thead>
+          <tbody>
+              <tr v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}" v-bind:class="{bordureRouge:(index === 2)}" @click="selectionRestaurant(r)">
+                  <td align="center">{{r.name}}</td>
+                  <td align="center"> {{r.cuisine}}</td>
+                  <td align="center">
+                  	<button class="delete" v-on:click="supprimerRestaurant(r._id)">DELETE</button>
+                  </td>
+                  <td align="center">
+                  	<button class="modifier" v-on:click="afficherFormulaire(r._id, r.name, r.cuisine)">Modifier</button>
+                  </td>
+                  <td>
+                  <router-link class="detail" tag="button" :to="`/detail/${r._id}`">Detail</router-link>
+              </td>
+              </tr>
+          </tbody>
         </table>
         <br />
-                 
+
                <!--  <detail></detail>
                 <div id="test">{{borough}}</div> -->
                 <div id="detailsRestaurant">
-                    <app-restau-detail 
+                    <app-restau-detail
                     v-bind:borough="borough"
                     v-bind:building="building"
                     v-bind:street="street"
                     v-bind:zipcode="zipcode"
-                    ></app-restau-detail> 
+                    ></app-restau-detail>
                     <router-link class="button" :to="`/carte/`">Accèder à la carte</router-link>
                 </div>
         <br />
@@ -95,75 +88,69 @@
         <button class="bouton" v-on:click="pageSuivante">Suivant</button>
         </div>
     </div>
-	 
+
   </div>
 </template>
 
 <script>
-    import detail from './Detail.vue'
+import detail from './Detail.vue'
 export default {
-    components : {detail},
+  components : {detail},
   name: 'app',
   data () {
     return {
-	restaurants: [{
-                    nom: 'café de Paris',
-                    cuisine: 'Française'
-                },
-                {
-                    nom: 'Sun City Café',
-                    cuisine: 'Américaine'
-                }
-            ],
-            nom: '',
-            cuisine: '',
-            borough: '',
-            building: '',
-            street : '',
-            zipcode : '',
-            id: null,
-            nbRestaurants:0,
-            formulaireRestaurant:
-            {
-                id: null,
-                nom: null,
-                cuisine: null
-            },
-            page:0,
-            dernierePage:0,
-            pagesize:10,
-            name:""
-
+      restaurants: [{
+        nom: 'café de Paris',
+        cuisine: 'Française'
+      },
+      {
+        nom: 'Sun City Café',
+        cuisine: 'Américaine'
+      }],
+      nom: '',
+      cuisine: '',
+      borough: '',
+      building: '',
+      street : '',
+      zipcode : '',
+      id: null,
+      nbRestaurants:0,
+      formulaireRestaurant:
+      {
+        id: null,
+        nom: null,
+        cuisine: null
+      },
+      page:0,
+      dernierePage:0,
+      pagesize:10,
+      name:""
     }
   },
-   mounted() {
-            console.log("AVANT AFFICHAGE");
-            document.querySelector("#formulairemodif").style.display="none";
-            document.querySelector("#detailsRestaurant").style.display="none";
-            this.getRestaurantsFromServer();
-            //console.log(this.$route);
-        },
+  mounted() {
+    console.log("AVANT AFFICHAGE");
+    document.querySelector("#formulairemodif").style.display="none";
+    document.querySelector("#detailsRestaurant").style.display="none";
+    this.getRestaurantsFromServer();
+    },
 		methods: {
-            getRestaurantsFromServer() {
-                let url = "http://localhost:8080/api/restaurants?page=" +
-                    this.page + "&pagesize=" +
-                    this.pagesize + "&name=" +
-                    this.name;
-
-                fetch(url)
-                    .then((reponseJSON) => {
-                        reponseJSON.json()
-                            .then((reponseJS) => {
-                                this.restaurants = reponseJS.data;
-                                this.nbRestaurants = reponseJS.count;
-                                this.dernierePage=Math.floor(this.nbRestaurants/this.pagesize);
-                                console.log(reponseJS.msg);
-                            });
-                    })
-                    .catch(function (err) {
-                        console.log(err);
-                    });
-            },
+      getRestaurantsFromServer() {
+        let url = "http://localhost:8080/api/restaurants?page=" +
+        this.page + "&pagesize=" +
+        this.pagesize + "&name=" +
+        this.name;
+        fetch(url).then((reponseJSON) => {
+          reponseJSON.json().then((reponseJS) => {
+            this.restaurants = reponseJS.data;
+            this.nbRestaurants = reponseJS.count;
+            this.dernierePage=Math.floor(this.nbRestaurants/this.pagesize);
+            console.log(reponseJS.msg);
+          });
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+      },
             selectionRestaurant(r){
                 console.log(r._id);
                 console.log(r.cuisine);
@@ -198,16 +185,16 @@ export default {
                     .catch(function (err) {
                         console.log(err);
                     });
-                
+
                 this.nom = "";
-                this.cuisine = "";    
+                this.cuisine = "";
             },
             ajouterRestaurant(event) {
                 event.preventDefault();
-                
+
                 let form = event.target;
                 console.log(form);
-                
+
                 let dataFormulaire = new FormData(form);
                 let url = "http://localhost:8080/api/restaurants";
 
@@ -225,7 +212,7 @@ export default {
                     .catch(function (err) {
                         console.log(err);
                     });
-                
+
                 this.nom = "";
                 this.cuisine = "";
             },
@@ -237,7 +224,7 @@ export default {
                 console.log(form);
                 let dataFormulaire = new FormData(form);
                 let id = form._id.value;
-                
+
                 console.log("ID vaut : " + id);
 
                 let url = "http://localhost:8080/api/restaurants/"+id;
@@ -259,9 +246,9 @@ export default {
                 document.querySelector("#formulairemodif").style.display="none";
             },
             getColor(index) {
-                return (index % 2) ? 'lightBlue' : 'pink';
+                return (index % 2) ? 'rgb(232, 232, 232)' : '#FFFFFF';
             },
-            
+
             pageSuivante() {
                 let NbPageMax=0;
 
@@ -271,7 +258,7 @@ export default {
                 else{
                     NbPageMax= (this.nbRestaurants)/9;
                 }
-                
+
                 if (this.page < NbPageMax){
                     this.page++;
                     this.getRestaurantsFromServer();
@@ -307,10 +294,10 @@ export default {
                 this.formulaireRestaurant.id=index;
                 this.formulaireRestaurant.nom=nom;
                 this.formulaireRestaurant.cuisine=cuisine;
-                
+
                 /*console.log(this.formulaireRestaurant.id);
                 console.log(this.formulaireRestaurant.nom);*/
-                
+
             },
             chercherRestaurants: _.debounce(function () {
                 this.getRestaurantsFromServer();
@@ -321,27 +308,20 @@ export default {
 
 <style>
 table {
-    border: 1px solid black;
-    width: 100%;
+    width: 99%;
     border-collapse: collapse;
 }
 
 tr,
 td {
-    border: 1px solid black;
+    border-top:2px solid #dee2e6;
+    border-bottom:2px solid #dee2e6;
 }
 
 td {
     padding: 5px;
 }
 
-tr:hover {
-    background-color: yellow;
-}
-th {
-    background-color: black;
-    color: white;
-}
 #ajoutFormulaire{
     width: 50%;
     padding: 10px 15px;
@@ -350,13 +330,6 @@ th {
 #recherche{
     width: 50%;
     padding: 10px 15px;
-}
-input:invalid {
-    background-color: pink;
-}
-
-input:valid {
-    background-color: lightGreen;
 }
 
 .bouton {
@@ -389,16 +362,18 @@ input[type=text]{
     box-sizing: border-box;
 }
 .submit {
-    width: 20%;
-    background-color: gray;
+    background-color: #007bff;
+    color:#fff;
+    font-size: 1rem;
+    font-weight: 400;
     padding: 10px 15px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 .delete {
-  background-color: red; 
-  color: white; 
+  background-color: red;
+  color: white;
   border-radius: 4px;
   border: 2px solid black;
 }
@@ -408,8 +383,8 @@ input[type=text]{
   color: white;
 }
 .modifier {
-  background-color: blue; 
-  color: white; 
+  background-color: blue;
+  color: white;
   border-radius: 4px;
   border: 2px solid black;
 }
