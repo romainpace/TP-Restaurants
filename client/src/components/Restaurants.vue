@@ -69,7 +69,7 @@
                     v-bind:street="street"
                     v-bind:zipcode="zipcode"
                     ></app-restau-detail>
-                    <router-link class="button" :to="`/carte/`">Accèder à la carte</router-link>
+                    <router-link class="button" :to="`/menu/`">Accèder à la carte</router-link>
                 </div>
         <br />
         <div class="pagination">
