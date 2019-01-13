@@ -12,7 +12,7 @@ const routes =
 [
   { path: "/restaurants", component: Restaurants },
   { path: "/detail/:id", component: Detail },
-  { path: "/carte/:id", component: Carte },
+  { path: "/carte/", component: Carte },
 ];
 
 const router = new VueRouter({
@@ -23,7 +23,7 @@ const router = new VueRouter({
 //Création du composant <app-restau-detail>
 Vue.component("app-restau-detail", {
   props: ["building", "street", "zipcode", "borough"],
-  template: '<p>Adresse : {{building}}, {{street}} {{zipcode}} {{borough}} </p>'
+  template: '<p>Adresse : {{building}}, {{street}} {{zipcode}} {{borough}} </p> '
 });
 
 //Création du composant <app-menu-restau>
@@ -32,6 +32,7 @@ Vue.component("app-restau-detail", {
   template: '<p>Adresse : {{building}}, {{street}} {{zipcode}} {{borough}} </p>'
 });*/
 
+window.bus= new Vue();
 
 new Vue({
   el: '#app',
