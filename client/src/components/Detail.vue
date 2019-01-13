@@ -2,7 +2,7 @@
 <div class="detail">
 <p>Adresse : {{building}}, {{street}} {{zipcode}} {{borough}} </p>
 </div>
-              
+
 </template>
 
 <script>
@@ -27,12 +27,9 @@ export default {
       })
     })
   }*/
-
 }
-    
+
 </script>
 
 <style>
-
 </style>
-
