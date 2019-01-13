@@ -75,7 +75,7 @@
         <div class="pagination">
         <button class="bouton" v-on:click="pagePrecedente">Précédent</button>
         <button class="boutonPage" v-on:click="firstPage">1</button>
-        <button class="boutonPage">Page {{page+1}}</button>
+        <button class="currentPage">{{page+1}}</button>
         <button class="boutonPage" v-on:click="lastPage">{{dernierePage}}</button>
         <button class="bouton" v-on:click="pageSuivante">Suivant</button>
         </div>
@@ -304,19 +304,39 @@ td {
   padding: 10px 15px;
 }
 
-.bouton {
-	border:none;
-  padding: 14px 40px;
-	border-radius:8px;
-	background:#d34836;
-	font:bold 13px Arial;
-	color:#fff;
-  text-align: center;
+.bouton{
+  background-color: #FFFFFF;
+  color:#000000;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  margin:0 2px 0 2px;
+  outline:none;
+}
+.bouton:hover, .boutonPage:hover{
+  background:linear-gradient(to bottom, #585858 0%, #111 100%);
+  color:#FFFFFF;
+  border-radius: 4px;
 }
 .boutonPage{
   background-color: white;
   color: black;
-  border: 2px solid #e7e7e7;
+  font-size: 1rem;
+  font-weight: 400;
+  border:none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  outline:none;
+}
+.currentPage{
+  background:linear-gradient(to bottom, #fff 0%, #dcdcdc 100%);
+  border:1px solid #979797;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0.5rem 1rem;
+  outline:none;
 }
 #formulairemodif{
   border-radius: 5px;
