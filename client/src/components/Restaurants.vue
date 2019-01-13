@@ -42,27 +42,19 @@
         <table>
           <thead>
             <tr>
+                <th></th>
                 <th>Nom</th>
                 <th>Cuisine </th>
-                <th>Delete</th>
-                <th>Modifier</th>
-                <th>Détails</th>
-
             </tr>
           </thead>
           <tbody>
               <tr v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}" v-bind:class="{bordureRouge:(index === 2)}" @click="selectionRestaurant(r)">
+                <td align="center">
+                  <i class="delete fas fa-times fa-lg" v-on:click="supprimerRestaurant(r._id)"></i>
+                  <i class="modifier fas fa-edit fa-lg" v-on:click="afficherFormulaire(r._id, r.name, r.cuisine)"></i>
+                </td>
                   <td align="center">{{r.name}}</td>
                   <td align="center"> {{r.cuisine}}</td>
-                  <td align="center">
-                  	<button class="delete" v-on:click="supprimerRestaurant(r._id)">DELETE</button>
-                  </td>
-                  <td align="center">
-                  	<button class="modifier" v-on:click="afficherFormulaire(r._id, r.name, r.cuisine)">Modifier</button>
-                  </td>
-                  <td>
-                  <router-link class="detail" tag="button" :to="`/detail/${r._id}`">Detail</router-link>
-              </td>
               </tr>
           </tbody>
         </table>
@@ -230,7 +222,7 @@ export default {
       document.querySelector("#formulairemodif").style.display="none";
     },
     getColor(index) {
-      return (index % 2) ? 'rgb(232, 232, 232)' : '#FFFFFF';
+      return (index % 2) ? 'rgb(0,0,0,.05)' : '#FFFFFF';
     },
     pageSuivante() {
       let NbPageMax=0;
@@ -273,23 +265,34 @@ export default {
     },
     chercherRestaurants: _.debounce(function(){
       this.getRestaurantsFromServer();
-    }, 500)}
+    }, 500)
   }
+}
 </script>
 
 <style>
+body{
+  font-family:arial;
+  font-size:1rem;
+}
 table {
-    width: 99%;
-    border-collapse: collapse;
+  width: 99%;
+  border-collapse: collapse;
 }
 
-tr, td {
-    border-top:2px solid #dee2e6;
-    border-bottom:2px solid #dee2e6;
+tr, td, th {
+    border-top:1px solid #DEE2E6;
+    border-bottom:1px solid #DEE2E6;
+    padding: .75rem;
+    text-align:left;
+}
+
+thead tr {
+  border-bottom:2px solid #DEE2E6;
 }
 
 td {
-    padding: 5px;
+    padding: .75rem;
 }
 
 #ajoutFormulaire{
@@ -298,7 +301,6 @@ td {
   box-sizing: border-box;
 }
 #recherche{
-  width: 50%;
   padding: 10px 15px;
 }
 
@@ -332,8 +334,8 @@ input[type=text]{
   box-sizing: border-box;
 }
 .submit {
-  background-color: #007bff;
-  color:#fff;
+  background-color: #007BFF;
+  color:#FFFFFF;
   font-size: 1rem;
   font-weight: 400;
   padding: 10px 15px;
@@ -342,27 +344,14 @@ input[type=text]{
   cursor: pointer;
 }
 .delete {
-  background-color: red;
-  color: white;
-  border-radius: 4px;
-  border: 2px solid black;
-}
-
-.delete:hover {
-  background-color: darkred;
-  color: white;
+  color: red;
+  cursor:pointer;
 }
 .modifier {
-  background-color: blue;
-  color: white;
-  border-radius: 4px;
-  border: 2px solid black;
+  color: #007BFF;
+  cursor:pointer;
 }
 
-.modifier:hover {
-  background-color: darkblue;
-  color: white;
-}
 .pagination{
   text-align: center;
 }
