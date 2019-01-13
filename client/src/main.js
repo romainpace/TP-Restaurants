@@ -4,6 +4,7 @@ import App from './App.vue'
 import Restaurants from "./components/Restaurants.vue";
 import Detail from "./components/Detail.vue";
 import Carte from "./components/Carte.vue";
+import AfficheMenu from "./components/AfficheMenu.vue";
 
 
 Vue.use(VueRouter);
@@ -13,6 +14,7 @@ const routes =
   { path: "/restaurants", component: Restaurants },
   { path: "/detail/:id", component: Detail },
   { path: "/carte/", component: Carte },
+  { path: "/menu/", component: AfficheMenu },
 ];
 
 const router = new VueRouter({
