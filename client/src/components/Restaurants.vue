@@ -135,7 +135,7 @@ export default {
         reponseJSON.json().then((reponseJS) => {
           this.restaurants = reponseJS.data;
           this.nbRestaurants = reponseJS.count;
-          this.dernierePage=Math.floor(this.nbRestaurants/this.pagesize);
+          this.dernierePage=Math.floor(this.nbRestaurants/this.pagesize)+1;
           console.log(reponseJS.msg);
         });
       })
