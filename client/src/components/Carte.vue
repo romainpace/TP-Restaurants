@@ -113,7 +113,7 @@ export default {
         var carte = {};
         var prix = 0;
 
-        for(var i= 0; i < 5; i++){
+        for(var i= 0; i < 3; i++){
             random = Math.floor(Math.random() * Math.floor(3));
             entre = this.entrees.entree[random];
             prix = this.entrees.prix[random];

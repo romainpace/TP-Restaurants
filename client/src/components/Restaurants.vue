@@ -50,11 +50,13 @@
                 <th>Cuisine </th>
                 <th>Delete</th>
                 <th>Modifier</th>
+                <th>Détails</th>
 
             </tr>
             <tbody>
                 <tr v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}"
-                    v-bind:class="{bordureRouge:(index === 2)}">
+                    v-bind:class="{bordureRouge:(index === 2)}"
+                    @click="selectionRestaurant(r)">
                     <!--<td>{{r._id}}</td>-->
                     <td align="center">{{r.name}}</td>
                     <td align="center"> {{r.cuisine}}</td>
@@ -66,13 +68,24 @@
                     	<!-- <button v-on:click="modifierRestaurant(r._id)">Modifier</button> -->
                     </td>
                     <td>
-                    <router-link class="rl" :to="`/detail/${r._id}`">Detail</router-link> 
+                    <router-link class="detail" tag="button" :to="`/detail/${r._id}`">Detail</router-link>
                 </td>
                 </tr>
             </tbody>
         </table>
         <br />
-                
+                 
+               <!--  <detail></detail>
+                <div id="test">{{borough}}</div> -->
+                <div id="detailsRestaurant">
+                    <app-restau-detail 
+                    v-bind:borough="borough"
+                    v-bind:building="building"
+                    v-bind:street="street"
+                    v-bind:zipcode="zipcode"
+                    ></app-restau-detail> 
+                    <router-link class="button" :to="`/carte/`">Accèder à la carte</router-link>
+                </div>
         <br />
         <div class="pagination">
         <button class="bouton" v-on:click="pagePrecedente">Précédent</button>
@@ -87,7 +100,9 @@
 </template>
 
 <script>
+    import detail from './Detail.vue'
 export default {
+    components : {detail},
   name: 'app',
   data () {
     return {
@@ -102,6 +117,10 @@ export default {
             ],
             nom: '',
             cuisine: '',
+            borough: '',
+            building: '',
+            street : '',
+            zipcode : '',
             id: null,
             nbRestaurants:0,
             formulaireRestaurant:
@@ -119,7 +138,10 @@ export default {
   },
    mounted() {
             console.log("AVANT AFFICHAGE");
+            document.querySelector("#formulairemodif").style.display="none";
+            document.querySelector("#detailsRestaurant").style.display="none";
             this.getRestaurantsFromServer();
+            //console.log(this.$route);
         },
 		methods: {
             getRestaurantsFromServer() {
@@ -141,6 +163,20 @@ export default {
                     .catch(function (err) {
                         console.log(err);
                     });
+            },
+            selectionRestaurant(r){
+                console.log(r._id);
+                console.log(r.cuisine);
+                console.log("Adresse : " + r.address.building + "," + r.address.street + " " + r.address.zipcode + " " + r.borough);
+                bus.$emit('restau',r._id);
+
+                //document.getElementById("test").innerHTML='<app-restau-detail></app-restau-detail>';
+                this.borough=r.borough;
+                this.building=r.address.building;
+                this.street=r.address.street;
+                this.zipcode=r.address.zipcode;
+
+                document.querySelector("#detailsRestaurant").style.display="block";
             },
             supprimerRestaurant(index) {
                 //this.restaurants.splice(index, 1);
@@ -279,6 +315,7 @@ export default {
             chercherRestaurants: _.debounce(function () {
                 this.getRestaurantsFromServer();
             }, 500)}
+
 }
 </script>
 
