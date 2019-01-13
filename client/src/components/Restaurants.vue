@@ -132,178 +132,149 @@ export default {
     document.querySelector("#formulairemodif").style.display="none";
     document.querySelector("#detailsRestaurant").style.display="none";
     this.getRestaurantsFromServer();
-    },
-		methods: {
-      getRestaurantsFromServer() {
-        let url = "http://localhost:8080/api/restaurants?page=" +
-        this.page + "&pagesize=" +
-        this.pagesize + "&name=" +
-        this.name;
-        fetch(url).then((reponseJSON) => {
-          reponseJSON.json().then((reponseJS) => {
-            this.restaurants = reponseJS.data;
-            this.nbRestaurants = reponseJS.count;
-            this.dernierePage=Math.floor(this.nbRestaurants/this.pagesize);
-            console.log(reponseJS.msg);
-          });
-        })
-        .catch(function (err) {
-          console.log(err);
+  },
+	methods: {
+    getRestaurantsFromServer() {
+      let url = "http://localhost:8080/api/restaurants?page=" +
+      this.page + "&pagesize=" +
+      this.pagesize + "&name=" +
+      this.name;
+      fetch(url).then((reponseJSON) => {
+        reponseJSON.json().then((reponseJS) => {
+          this.restaurants = reponseJS.data;
+          this.nbRestaurants = reponseJS.count;
+          this.dernierePage=Math.floor(this.nbRestaurants/this.pagesize);
+          console.log(reponseJS.msg);
         });
-      },
-            selectionRestaurant(r){
-                console.log(r._id);
-                console.log(r.cuisine);
-                console.log("Adresse : " + r.address.building + "," + r.address.street + " " + r.address.zipcode + " " + r.borough);
-                bus.$emit('restau',r._id);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+    },
+    selectionRestaurant(r){
+      console.log(r._id);
+      console.log(r.cuisine);
+      console.log("Adresse : " + r.address.building + "," + r.address.street + " " + r.address.zipcode + " " + r.borough);
+      bus.$emit('restau',r._id);
+      //document.getElementById("test").innerHTML='<app-restau-detail></app-restau-detail>';
+      this.borough=r.borough;
+      this.building=r.address.building;
+      this.street=r.address.street;
+      this.zipcode=r.address.zipcode;
+      document.querySelector("#detailsRestaurant").style.display="block";
+    },
+    supprimerRestaurant(index) {
 
-                //document.getElementById("test").innerHTML='<app-restau-detail></app-restau-detail>';
-                this.borough=r.borough;
-                this.building=r.address.building;
-                this.street=r.address.street;
-                this.zipcode=r.address.zipcode;
+      console.log(index);
 
-                document.querySelector("#detailsRestaurant").style.display="block";
-            },
-            supprimerRestaurant(index) {
-                //this.restaurants.splice(index, 1);
-                //console.log();
-                console.log(index);
+      let url = "http://localhost:8080/api/restaurants/"+index;
+      fetch(url, {method: "DELETE",}).then((reponseJSON) => {
+        reponseJSON.json().then((reponseJS) => {
+          console.log(reponseJS.msg);
+          this.getRestaurantsFromServer();
+        });
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
 
-                let url = "http://localhost:8080/api/restaurants/"+index;
+      this.nom = "";
+      this.cuisine = "";
+    },
+    ajouterRestaurant(event) {
+      event.preventDefault();
+      let form = event.target;
+      console.log(form);
 
-                fetch(url, {
-                        method: "DELETE",
-                    })
-                    .then((reponseJSON) => {
-                        reponseJSON.json()
-                            .then((reponseJS) => {
-                                console.log(reponseJS.msg);
-                                this.getRestaurantsFromServer();
-                            });
-                    })
-                    .catch(function (err) {
-                        console.log(err);
-                    });
+      let dataFormulaire = new FormData(form);
+      let url = "http://localhost:8080/api/restaurants";
+      fetch(url, {
+              method: "POST",
+              body: dataFormulaire
+      }).then((reponseJSON) => {
+        reponseJSON.json().then((reponseJS) => {
+          console.log(reponseJS.msg);
+          this.getRestaurantsFromServer();
+        });
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
 
-                this.nom = "";
-                this.cuisine = "";
-            },
-            ajouterRestaurant(event) {
-                event.preventDefault();
+      this.nom = "";
+      this.cuisine = "";
+    },
+    modifierRestaurant(event){
+      event.preventDefault();
 
-                let form = event.target;
-                console.log(form);
+      let form = event.target;
+      console.log(form);
 
-                let dataFormulaire = new FormData(form);
-                let url = "http://localhost:8080/api/restaurants";
+      let dataFormulaire = new FormData(form);
+      let id = form._id.value;
 
-                fetch(url, {
-                        method: "POST",
-                        body: dataFormulaire
-                    })
-                    .then((reponseJSON) => {
-                        reponseJSON.json()
-                            .then((reponseJS) => {
-                                console.log(reponseJS.msg);
-                                this.getRestaurantsFromServer();
-                            });
-                    })
-                    .catch(function (err) {
-                        console.log(err);
-                    });
+      console.log("ID vaut : " + id);
 
-                this.nom = "";
-                this.cuisine = "";
-            },
-            modifierRestaurant(event)
-            {
-                event.preventDefault();
+      let url = "http://localhost:8080/api/restaurants/"+id;
+      fetch(url, {
+        method: "PUT",
+        body: dataFormulaire
+      }).then((reponseJSON) => {
+        reponseJSON.json().then((reponseJS) => {
+          console.log(reponseJS.msg);
+          this.getRestaurantsFromServer();
+        });
+      }).catch(function (err) {
+        console.log(err);
+      });
+      document.querySelector("#formulairemodif").style.display="none";
+    },
+    getColor(index) {
+      return (index % 2) ? 'rgb(232, 232, 232)' : '#FFFFFF';
+    },
+    pageSuivante() {
+      let NbPageMax=0;
 
-                let form = event.target;
-                console.log(form);
-                let dataFormulaire = new FormData(form);
-                let id = form._id.value;
+      if(this.nbRestaurants%10 != 0){
+          NbPageMax=(this.nbRestaurants - this.nbRestaurants%10)/10;
+      }
+      else{
+          NbPageMax= (this.nbRestaurants)/9;
+      }
 
-                console.log("ID vaut : " + id);
-
-                let url = "http://localhost:8080/api/restaurants/"+id;
-                //let url = "http://localhost:8080/api/restaurants/"+index;
-                 fetch(url, {
-                        method: "PUT",
-                        body: dataFormulaire
-                    })
-                    .then((reponseJSON) => {
-                        reponseJSON.json()
-                            .then((reponseJS) => {
-                                console.log(reponseJS.msg);
-                                this.getRestaurantsFromServer();
-                            });
-                    })
-                    .catch(function (err) {
-                        console.log(err);
-                    });
-                document.querySelector("#formulairemodif").style.display="none";
-            },
-            getColor(index) {
-                return (index % 2) ? 'rgb(232, 232, 232)' : '#FFFFFF';
-            },
-
-            pageSuivante() {
-                let NbPageMax=0;
-
-                if(this.nbRestaurants%10 != 0){
-                    NbPageMax=(this.nbRestaurants - this.nbRestaurants%10)/10;
-                }
-                else{
-                    NbPageMax= (this.nbRestaurants)/9;
-                }
-
-                if (this.page < NbPageMax){
-                    this.page++;
-                    this.getRestaurantsFromServer();
-                }
-            },
-            pagePrecedente() {
-                if (this.page>0)
-                {
-                    this.page--;
-                    this.getRestaurantsFromServer();
-                 }
-            },
-             firstPage()
-            {
-                this.page=0;
-                this.getRestaurantsFromServer();
-            },
-            lastPage()
-            {
-                this.page=Math.floor(this.nbRestaurants / this.pagesize);
-                this.getRestaurantsFromServer();
-            },
-            slideBar()
-            {
-               this.pagesize= document.querySelector("#myRange").value;
-                this.getRestaurantsFromServer();
-            },
-            afficherFormulaire(index,nom,cuisine)
-            {
-                /*console.log("Test formulaire");
-                console.log(index);*/
-                document.querySelector("#formulairemodif").style.display="block";
-                this.formulaireRestaurant.id=index;
-                this.formulaireRestaurant.nom=nom;
-                this.formulaireRestaurant.cuisine=cuisine;
-
-                /*console.log(this.formulaireRestaurant.id);
-                console.log(this.formulaireRestaurant.nom);*/
-
-            },
-            chercherRestaurants: _.debounce(function () {
-                this.getRestaurantsFromServer();
-            }, 500)}
-
-}
+      if (this.page < NbPageMax){
+          this.page++;
+          this.getRestaurantsFromServer();
+      }
+    },
+    pagePrecedente() {
+        if (this.page>0){
+            this.page--;
+            this.getRestaurantsFromServer();
+         }
+    },
+    firstPage(){
+      this.page=0;
+      this.getRestaurantsFromServer();
+    },
+    lastPage(){
+      this.page=Math.floor(this.nbRestaurants / this.pagesize);
+      this.getRestaurantsFromServer();
+    },
+    slideBar(){
+      this.pagesize= document.querySelector("#myRange").value;
+      this.getRestaurantsFromServer();
+    },
+    afficherFormulaire(index,nom,cuisine){
+      document.querySelector("#formulairemodif").style.display="block";
+      this.formulaireRestaurant.id=index;
+      this.formulaireRestaurant.nom=nom;
+      this.formulaireRestaurant.cuisine=cuisine;
+    },
+    chercherRestaurants: _.debounce(function(){
+      this.getRestaurantsFromServer();
+    }, 500)}
+  }
 </script>
 
 <style>
@@ -312,8 +283,7 @@ table {
     border-collapse: collapse;
 }
 
-tr,
-td {
+tr, td {
     border-top:2px solid #dee2e6;
     border-bottom:2px solid #dee2e6;
 }
@@ -323,53 +293,53 @@ td {
 }
 
 #ajoutFormulaire{
-    width: 50%;
-    padding: 10px 15px;
-    box-sizing: border-box;
+  width: 50%;
+  padding: 10px 15px;
+  box-sizing: border-box;
 }
 #recherche{
-    width: 50%;
-    padding: 10px 15px;
+  width: 50%;
+  padding: 10px 15px;
 }
 
 .bouton {
 	border:none;
-    padding: 14px 40px;
+  padding: 14px 40px;
 	border-radius:8px;
 	background:#d34836;
 	font:bold 13px Arial;
 	color:#fff;
-    text-align: center;
+  text-align: center;
 }
 .boutonPage{
-    background-color: white;
-    color: black;
-    border: 2px solid #e7e7e7;
+  background-color: white;
+  color: black;
+  border: 2px solid #e7e7e7;
 }
 #formulairemodif{
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
 }
 
 input[type=text]{
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 .submit {
-    background-color: #007bff;
-    color:#fff;
-    font-size: 1rem;
-    font-weight: 400;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  background-color: #007bff;
+  color:#fff;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 .delete {
   background-color: red;
@@ -393,9 +363,8 @@ input[type=text]{
   background-color: darkblue;
   color: white;
 }
-.pagination
-{
-    text-align: center;
+.pagination{
+  text-align: center;
 }
 
 </style>
