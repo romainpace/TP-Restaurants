@@ -25,7 +25,7 @@ const router = new VueRouter({
 //Création du composant <app-restau-detail>
 Vue.component("app-restau-detail", {
   props: ["building", "street", "zipcode", "borough"],
-  template: '<p>{{building}}, {{street}} {{zipcode}} {{borough}} </p> '
+  template: '<p>Adresse : {{building}}, {{street}} {{zipcode}} {{borough}} </p> '
 });
 
 //Création du composant <app-menu-restau>
