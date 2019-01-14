@@ -2,8 +2,8 @@
 
 ## Membres
 
-David Pimienta
-Romain Pace
+- David Pimienta
+- Romain Pace
 
 ## Projet
 
