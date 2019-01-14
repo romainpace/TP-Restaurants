@@ -48,8 +48,6 @@
           </div>
         </div>
         <!-- Fin Modifier Restaurant -->
-
-
         <table>
           <thead>
             <tr>
@@ -59,29 +57,31 @@
             </tr>
           </thead>
           <tbody>
-              <tr v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}" v-bind:class="{bordureRouge:(index === 2)}" @click="selectionRestaurant(r)">
+              <tr v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}" v-bind:class="{bordureRouge:(index === 2)}">
                 <td align="center">
                   <i class="delete fas fa-times fa-lg" v-on:click="supprimerRestaurant(r._id)"></i>
                   <i class="modifier fas fa-edit fa-lg" v-on:click="afficherFormulaire(r._id, r.name, r.cuisine)"></i>
+                  <i class="map fas fa-map-marked fa-lg" v-on:click="selectionRestaurant(r)"></i>
                 </td>
                   <td align="center">{{r.name}}</td>
                   <td align="center"> {{r.cuisine}}</td>
               </tr>
           </tbody>
         </table>
-        <br />
-
-               <!--  <detail></detail>
-                <div id="test">{{borough}}</div> -->
-                <div id="detailsRestaurant">
-                    <app-restau-detail
-                    v-bind:borough="borough"
-                    v-bind:building="building"
-                    v-bind:street="street"
-                    v-bind:zipcode="zipcode"
-                    ></app-restau-detail>
-                    <router-link class="button" :to="`/menu/`">Accèder à la carte</router-link>
-                </div>
+        <br>
+        <div id="detailRestModal">
+          <div class="modal-content" id="detailsRestaurant">
+            <span class="close" v-on:click="closeDetailModal">&times;</span>
+            <h2>Adresse du restaurant : </h2>
+            <app-restau-detail
+            v-bind:borough="borough"
+            v-bind:building="building"
+            v-bind:street="street"
+            v-bind:zipcode="zipcode"
+            ></app-restau-detail>
+            <router-link class="button" :to="`/menu/`">Accèder à la carte</router-link>
+          </div>
+        </div>
         <br />
         <div class="pagination">
         <button class="bouton" v-on:click="pagePrecedente">Précédent</button>
@@ -121,7 +121,7 @@ export default {
       {
         id: null,
         nom: null,
-        cuisine: null
+        cuisine: null,
       },
       page:0,
       dernierePage:0,
@@ -131,7 +131,6 @@ export default {
   },
   mounted() {
     console.log("AVANT AFFICHAGE");
-    document.querySelector("#detailsRestaurant").style.display="none";
     this.getRestaurantsFromServer();
   },
 	methods: {
@@ -153,25 +152,17 @@ export default {
       });
     },
     selectionRestaurant(r){
-      console.log(r._id);
-      console.log(r.cuisine);
-      console.log("Adresse : " + r.address.building + "," + r.address.street + " " + r.address.zipcode + " " + r.borough);
       bus.$emit('restau',r._id);
-      //document.getElementById("test").innerHTML='<app-restau-detail></app-restau-detail>';
       this.borough=r.borough;
       this.building=r.address.building;
       this.street=r.address.street;
       this.zipcode=r.address.zipcode;
-      document.querySelector("#detailsRestaurant").style.display="block";
+      document.querySelector("#detailRestModal").style.display="block";
     },
     supprimerRestaurant(index) {
-
-      console.log(index);
-
       let url = "http://localhost:8080/api/restaurants/"+index;
       fetch(url, {method: "DELETE",}).then((reponseJSON) => {
         reponseJSON.json().then((reponseJS) => {
-          console.log(reponseJS.msg);
           this.getRestaurantsFromServer();
         });
       })
@@ -209,13 +200,8 @@ export default {
       event.preventDefault();
 
       let form = event.target;
-      console.log(form);
-
       let dataFormulaire = new FormData(form);
       let id = form._id.value;
-
-      console.log("ID vaut : " + id);
-
       let url = "http://localhost:8080/api/restaurants/"+id;
       fetch(url, {
         method: "PUT",
@@ -228,7 +214,6 @@ export default {
       }).catch(function (err) {
         console.log(err);
       });
-      document.querySelector("#formulairemodif").style.display="none";
     },
     getColor(index) {
       return (index % 2) ? 'rgb(0,0,0,.05)' : '#FFFFFF';
@@ -277,9 +262,13 @@ export default {
       this.formulaireRestaurant.id=index;
       this.formulaireRestaurant.nom=nom;
       this.formulaireRestaurant.cuisine=cuisine;
+      console.log(this.formulaireRestaurant.nom);
     },
     closeModifModal(){
       document.querySelector("#modifRestModal").style.display = "none";
+    },
+    closeDetailModal(){
+      document.querySelector("#detailRestModal").style.display = "none";
     },
     chercherRestaurants: _.debounce(function(){
       this.getRestaurantsFromServer();
@@ -385,6 +374,10 @@ input[type=text]{
   color: #007BFF;
   cursor:pointer;
 }
+.map{
+  color:rgb(65, 184, 131);
+  cursor:pointer;
+}
 
 .pagination{
   text-align: center;
@@ -393,7 +386,7 @@ input[type=text]{
   margin:1rem 0;
 }
 
-#addRestModal, #modifRestModal {
+#addRestModal, #modifRestModal, #detailRestModal {
   display: none;
   position: fixed;
   z-index: 1;
@@ -406,7 +399,6 @@ input[type=text]{
   background-color: rgb(0,0,0);
   background-color: rgba(0,0,0,0.5);
 }
-
 .modal-content {
   background-color: #FEFEFE;
   margin: auto;
@@ -415,7 +407,9 @@ input[type=text]{
   border-radius:.3rem;
   width: 80%;
 }
-
+#detailsRestaurant{
+  width: 40%;
+}
 .close {
   color: #aaaaaa;
   float: right;
