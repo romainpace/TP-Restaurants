@@ -1,17 +1,22 @@
 <template>
-  <div id="app">
     <div id="app">
-        <form id="ajoutFormulaire" v-on:submit="ajouterRestaurant" style="width:100%">
-            <h2>Ajouter un restaurant :</h2>
-            <label>Nom du restaurant</label>
-            <input type="text" name="nom" required v-model="nom" placeholder="Ex. Wendy's">
+        <input id="RestBtn" type="button" class="submit" value="Ajouter un Restaurant" v-on:click="afficherModal">
+        <br>
+        <!-- Ajouter un restaurant -->
+        <div id="addRestModal">
+          <div class="modal-content">
+            <span class="close" v-on:click="closeTimesModal">&times;</span>
+            <form id="ajoutFormulaire" v-on:submit="ajouterRestaurant" style="width:100%">
+                <h2>Ajouter un restaurant :</h2>
+                <label>Nom du restaurant</label>
+                <input type="text" name="nom" required v-model="nom" placeholder="Ex. Wendy's">
+                <label>Type de cuisine</label>
+                <input type="text" name="cuisine" required v-model="cuisine" placeholder="Ex. American">
 
-            <label>Type de cuisine</label>
-            <input type="text" name="cuisine" required v-model="cuisine" placeholder="Ex. American">
-
-            <button class="submit">Ajouter</button>
-        </form>
-        <hr>
+                <button class="submit" v-on:click="closeTimesModal">Ajouter</button>
+            </form>
+          </div>
+        </div>
 
         <label>Recherche : </label>
         <input id="recherche" type="text" v-on:input="chercherRestaurants" v-model="name">
@@ -81,7 +86,6 @@
         </div>
     </div>
 
-  </div>
 </template>
 
 <script>
@@ -224,6 +228,12 @@ export default {
     getColor(index) {
       return (index % 2) ? 'rgb(0,0,0,.05)' : '#FFFFFF';
     },
+    afficherModal(){
+      document.querySelector("#addRestModal").style.display = "block";
+    },
+    closeTimesModal(){
+      document.querySelector("#addRestModal").style.display = "none";
+    },
     pageSuivante() {
       let NbPageMax=0;
 
@@ -268,6 +278,7 @@ export default {
     }, 500)
   }
 }
+
 </script>
 
 <style>
@@ -375,5 +386,43 @@ input[type=text]{
 .pagination{
   text-align: center;
 }
+#RestBtn{
+  margin:1rem 0;
+}
 
+#addRestModal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: #FEFEFE;
+  margin: auto;
+  padding: 20px;
+  border:1px solid rgba(0,0,0,.2);
+  border-radius:.3rem;
+  width: 80%;
+}
+
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover{
+  color: #000;
+  text-decoration: none;
+}
 </style>
