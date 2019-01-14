@@ -1,11 +1,11 @@
 <template>
     <div id="app">
-        <input id="RestBtn" type="button" class="submit" value="Ajouter un Restaurant" v-on:click="afficherModal">
+        <input id="RestBtn" type="button" class="submit" value="Ajouter un Restaurant" v-on:click="afficherAddModal">
         <br>
         <!-- Ajouter un restaurant -->
         <div id="addRestModal">
           <div class="modal-content">
-            <span class="close" v-on:click="closeTimesModal">&times;</span>
+            <span class="close" v-on:click="closeAddModal">&times;</span>
             <form id="ajoutFormulaire" v-on:submit="ajouterRestaurant" style="width:100%">
                 <h2>Ajouter un restaurant :</h2>
                 <label>Nom du restaurant</label>
@@ -13,7 +13,7 @@
                 <label>Type de cuisine</label>
                 <input type="text" name="cuisine" required v-model="cuisine" placeholder="Ex. American">
 
-                <button class="submit" v-on:click="closeTimesModal">Ajouter</button>
+                <button class="submit" v-on:click="closeAddModal">Ajouter</button>
             </form>
           </div>
         </div>
@@ -29,18 +29,24 @@
         </div>
 
         <!-- Modifier Restaurant -->
-        <form id="formulairemodif" v-on:submit="modifierRestaurant">
-          <label for="id">Id :</label>
-          <input id="id" type="text" name="_id" v-model="formulaireRestaurant.id">
+        <div id="modifRestModal">
+          <div class="modal-content">
+            <span class="close" v-on:click="closeModifModal">&times;</span>
+            <form v-on:submit="modifierRestaurant">
+              <h2>Modifier le restaurant {{formulaireRestaurant.nom}} : </h2>
+              <label for="id">ID :</label>
+              <input id="id" type="text" name="_id" v-model="formulaireRestaurant.id">
 
-          <label for="nom">Nom</label>
-          <input id="nomrestaurant" type="text" name="nom" v-model="formulaireRestaurant.nom">
+              <label for="nom">Nom</label>
+              <input id="nomrestaurant" type="text" name="nom" v-model="formulaireRestaurant.nom">
 
 
-          <label for="cuisine">Cuisine</label>
-          <input id="cuisine" type="text" name="cuisine" v-model="formulaireRestaurant.cuisine">
-          <button class="submit">Valider</button>
-        </form>
+              <label for="cuisine">Cuisine</label>
+              <input id="cuisine" type="text" name="cuisine" v-model="formulaireRestaurant.cuisine">
+              <button class="submit" v-on:click="closeModifModal">Modifier</button>
+            </form>
+          </div>
+        </div>
         <!-- Fin Modifier Restaurant -->
 
 
@@ -125,7 +131,6 @@ export default {
   },
   mounted() {
     console.log("AVANT AFFICHAGE");
-    document.querySelector("#formulairemodif").style.display="none";
     document.querySelector("#detailsRestaurant").style.display="none";
     this.getRestaurantsFromServer();
   },
@@ -228,10 +233,10 @@ export default {
     getColor(index) {
       return (index % 2) ? 'rgb(0,0,0,.05)' : '#FFFFFF';
     },
-    afficherModal(){
+    afficherAddModal(){
       document.querySelector("#addRestModal").style.display = "block";
     },
-    closeTimesModal(){
+    closeAddModal(){
       document.querySelector("#addRestModal").style.display = "none";
     },
     pageSuivante() {
@@ -268,10 +273,13 @@ export default {
       this.getRestaurantsFromServer();
     },
     afficherFormulaire(index,nom,cuisine){
-      document.querySelector("#formulairemodif").style.display="block";
+      document.querySelector("#modifRestModal").style.display="block";
       this.formulaireRestaurant.id=index;
       this.formulaireRestaurant.nom=nom;
       this.formulaireRestaurant.cuisine=cuisine;
+    },
+    closeModifModal(){
+      document.querySelector("#modifRestModal").style.display = "none";
     },
     chercherRestaurants: _.debounce(function(){
       this.getRestaurantsFromServer();
@@ -349,11 +357,6 @@ td {
   padding: 0.5rem 1rem;
   outline:none;
 }
-#formulairemodif{
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
-}
 
 input[type=text]{
   width: 100%;
@@ -390,7 +393,7 @@ input[type=text]{
   margin:1rem 0;
 }
 
-#addRestModal {
+#addRestModal, #modifRestModal {
   display: none;
   position: fixed;
   z-index: 1;
